@@ -16,6 +16,7 @@ var (
 	KafkaFetchMessageMaxBytes     int64
 	ReplicaFetchMaxBytes          int64
 	KafkaAdvertiseAddress         string
+	KafkaAdvertiseInf             string
 	RemoteMode                    bool
 	KafkaHost                     string
 	KafkaPort                     int
@@ -32,6 +33,7 @@ func init() {
 	KafkaFetchMessageMaxBytes = gutil.GetEnvInt64("KAFKA_FETCH_MESSAGE_MAX_BYTES", -1)
 	ReplicaFetchMaxBytes = gutil.GetEnvInt64("REPLICA_FETCH_MAX_BYTES", -1)
 	KafkaAdvertiseAddress = gutil.GetEnvStr("KAFKA_ADVERTISE_ADDRESS", "")
+	KafkaAdvertiseInf = gutil.GetEnvStr("KAFKA_ADVERTISE_INF", "")
 	RemoteMode = gutil.GetEnvBool("REMOTE_MODE", true)
 	KafkaHost = "127.0.0.1"
 	KafkaPort = 9092

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/paas-mate/gutil"
 	"go.uber.org/zap"
-	"io/ioutil"
 	"kafka_mate_go/pkg/config"
 	"kafka_mate_go/pkg/path"
 	"kafka_mate_go/pkg/util"
@@ -48,7 +47,13 @@ func Config() error {
 		return err
 	}
 	if !config.ClusterEnable {
-		if config.KafkaAdvertiseAddress != "" {
+		if config.KafkaAdvertiseInf != "" {
+			addr, err := gutil.GetInterfaceIpv4Addr(config.KafkaAdvertiseInf)
+			if err != nil {
+				return err
+			}
+			configProp.Set("advertised.listeners", fmt.Sprintf("PLAINTEXT://%s:9092", addr))
+		} else if config.KafkaAdvertiseAddress != "" {
 			configProp.Set("advertised.listeners", fmt.Sprintf("PLAINTEXT://%s:9092", config.KafkaAdvertiseAddress))
 		}
 	} else {
@@ -78,7 +83,7 @@ func Config() error {
 func initFromFile(file string) (*gutil.ConfigProperties, error) {
 	configProp := gutil.ConfigProperties{}
 	configProp.Init()
-	fileBytes, err := ioutil.ReadFile(file)
+	fileBytes, err := os.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
